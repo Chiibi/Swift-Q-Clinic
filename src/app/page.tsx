@@ -14,12 +14,8 @@ import {
   deleteDoc,
   updateDoc,
   serverTimestamp,
-  DocumentData,
-  QueryDocumentSnapshot,
-  Timestamp,
   arrayUnion,
   arrayRemove,
-  getDocs,
 } from "firebase/firestore";
 import { Terminal, SupportTicket, SupportTicketStatus, Team, Participant } from "@/lib/firebase/types"; // Re-added Team, Participant
 import {
@@ -32,7 +28,6 @@ import {
   DragEndEvent,
   DragStartEvent,
   DragOverlay,
-  useDraggable,
   useDroppable,
   UniqueIdentifier,
 } from "@dnd-kit/core";

@@ -11,13 +11,6 @@ import {
   addDoc,
   deleteDoc,
   updateDoc,
-  serverTimestamp, // Keep if needed for participant timestamps?
-  DocumentData,
-  QueryDocumentSnapshot,
-  Timestamp,
-  arrayUnion, // Keep if needed for team members array?
-  arrayRemove, // Keep if needed for team members array?
-  getDocs,
   setDoc, // Use setDoc for adding participant with specific UUID
 } from "firebase/firestore";
 import { Team, Participant } from "@/lib/firebase/types";
