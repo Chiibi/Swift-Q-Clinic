@@ -50,39 +50,39 @@ export default function EditTicketModal({ ticket, isOpen, onClose, onSave }: Edi
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-      <div className="relative mx-auto p-6 border border-neutral-200 dark:border-neutral-700 w-full max-w-md shadow-xl rounded-xl bg-white/80 dark:bg-neutral-800/80 backdrop-blur-lg text-[var(--foreground)]">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
+      <div className="relative mx-auto p-6 border border-neutral-200 w-full max-w-md shadow-xl rounded-xl bg-white/80 backdrop-blur-lg text-neutral-900">
         <h3 className="text-lg font-medium leading-6 mb-5">Edit Ticket</h3>
         <form onSubmit={handleSave}>
           <div className="mb-4">
-            <label htmlFor="edit-teamName" className="block text-sm font-medium text-[var(--foreground)] mb-1">Team</label>
+            <label htmlFor="edit-teamName" className="block text-sm font-medium text-neutral-700 mb-1">Team</label>
             <input
               type="text"
               id="edit-teamName"
               value={ticket!.teamName}
               disabled // Team/Participant selection will be added later
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm bg-neutral-100 text-neutral-500 cursor-not-allowed"
             />
           </div>
            <div className="mb-4">
-            <label htmlFor="edit-participantName" className="block text-sm font-medium text-[var(--foreground)] mb-1">Participant</label>
+            <label htmlFor="edit-participantName" className="block text-sm font-medium text-neutral-700 mb-1">Participant</label>
             <input
               type="text"
               id="edit-participantName"
               value={ticket!.participantName || 'N/A'}
               disabled // Team/Participant selection will be added later
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm bg-neutral-100 text-neutral-500 cursor-not-allowed"
             />
           </div>
           <div className="mb-5"> {/* Increased margin */}
-            <label htmlFor="edit-topic" className="block text-sm font-medium text-[var(--foreground)] mb-1">Topic *</label>
+            <label htmlFor="edit-topic" className="block text-sm font-medium text-neutral-700 mb-1">Topic *</label>
             <input
               type="text"
               id="edit-topic"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[var(--foreground)] placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+              className="w-full px-3 py-2 border border-neutral-300 bg-neutral-50 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
             />
           </div>
           {/* Add other editable fields here */}
@@ -92,7 +92,7 @@ export default function EditTicketModal({ ticket, isOpen, onClose, onSave }: Edi
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="px-4 py-2 bg-neutral-200 dark:bg-neutral-600 text-neutral-800 dark:text-neutral-100 rounded-md hover:bg-neutral-300 dark:hover:bg-neutral-500 font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-neutral-200 text-neutral-800 rounded-md hover:bg-neutral-300 font-medium disabled:opacity-60 disabled:cursor-not-allowed"
             >
               Cancel
             </button>

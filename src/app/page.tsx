@@ -62,27 +62,27 @@ function SortableTicket({ ticket, isOverlay, onEdit, onDelete }: SortableTicketP
   // Removed getBackgroundColor function, applying consistent style
   return (
     // Apple-like card style: subtle background, rounded corners, border
-    <div ref={setNodeRef} style={style} className={`p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-750 shadow-sm mb-2 relative group ${isOverlay ? 'shadow-xl scale-105' : ''}`}>
+    <div ref={setNodeRef} style={style} className={`p-3 rounded-lg border border-neutral-200 bg-neutral-50 shadow-sm mb-2 relative group ${isOverlay ? 'shadow-xl scale-105' : ''}`}>
        {/* Subtle Drag Handle */}
-       <div {...attributes} {...listeners} className="absolute top-1.5 right-1.5 cursor-grab p-1 text-neutral-400 dark:text-neutral-500 opacity-0 group-hover:opacity-60 transition-opacity">⠿</div>
+       <div {...attributes} {...listeners} className="absolute top-1.5 right-1.5 cursor-grab p-1 text-neutral-400 opacity-0 group-hover:opacity-60 transition-opacity">⠿</div>
 
       {/* Adjusted text colors for better contrast */}
-      <p className="font-medium text-sm text-neutral-900 dark:text-neutral-100">{ticket.teamName}{ticket.status === 'called' ? ' (Called)' : ticket.status === 'in_progress' ? ' (In Progress)' : ''}</p>
-      <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-0.5">{ticket.topic}</p>
-      <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Req: {ticket.requestTimestamp?.toDate().toLocaleTimeString()}</p>
+      <p className="font-medium text-sm text-neutral-900">{ticket.teamName}{ticket.status === 'called' ? ' (Called)' : ticket.status === 'in_progress' ? ' (In Progress)' : ''}</p>
+      <p className="text-xs text-neutral-600 mt-0.5">{ticket.topic}</p>
+      <p className="text-xs text-neutral-500 mt-1">Req: {ticket.requestTimestamp?.toDate().toLocaleTimeString()}</p>
        {/* Edit/Delete Buttons - Apple-like subtle buttons */}
        {!isOverlay && (
         <div className="absolute bottom-1.5 right-1.5 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
                 onClick={(e) => { e.stopPropagation(); onEdit(ticket); }}
-                className="text-xs bg-neutral-200 dark:bg-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-500 text-neutral-700 dark:text-neutral-200 p-1.5 rounded-md leading-none"
+                className="text-xs bg-neutral-200 hover:bg-neutral-300 text-neutral-700 p-1.5 rounded-md leading-none"
                 aria-label={`Edit ticket for ${ticket.teamName}`}
             >
                 ✏️
             </button>
             <button
                 onClick={(e) => { e.stopPropagation(); onDelete(ticket.id, ticket.teamName, ticket.topic); }}
-                className="text-xs bg-red-100 dark:bg-red-900/50 hover:bg-red-200 dark:hover:bg-red-800/60 text-red-700 dark:text-red-300 p-1.5 rounded-md leading-none"
+                className="text-xs bg-red-100 hover:bg-red-200 text-red-700 p-1.5 rounded-md leading-none"
                 aria-label={`Delete ticket for ${ticket.teamName}`}
             >
                 🗑️
@@ -112,8 +112,8 @@ function DroppableContainer({ id, title, items, isOpen = true, itemCount, termin
   const { setNodeRef, isOver } = useDroppable({ id, data: { type: 'container', accepts: ['ticket'] } });
   const sortableItemIds = useMemo(() => items.filter(t => t.id !== terminalData?.currentTicketId).map(t => t.id), [items, terminalData?.currentTicketId]);
   // Apply Apple-like styling: semi-transparent background, blur, rounded corners, subtle border
-  const containerStyle = `p-4 rounded-xl shadow-sm border min-h-[300px] flex flex-col ${isOpen ? "bg-white/60 dark:bg-neutral-800/60 backdrop-blur-lg border-neutral-200 dark:border-neutral-700" : "bg-neutral-300/50 dark:bg-neutral-700/50 border-neutral-400 dark:border-neutral-600"} ${isOver ? 'outline outline-2 outline-offset-2 outline-blue-500' : ''}`;
-  const titleStyle = `text-lg font-medium mb-3 text-center border-b border-neutral-200 dark:border-neutral-700 pb-2 ${isOpen ? "text-[var(--foreground)]" : "text-neutral-600 dark:text-neutral-400"}`;
+  const containerStyle = `p-4 rounded-xl shadow-sm border min-h-[300px] flex flex-col ${isOpen ? "bg-white/60 backdrop-blur-lg border-neutral-200" : "bg-neutral-300/50 border-neutral-400"} ${isOver ? 'outline outline-2 outline-offset-2 outline-blue-500' : ''}`;
+  const titleStyle = `text-lg font-medium mb-3 text-center border-b border-neutral-200 pb-2 ${isOpen ? "text-neutral-900" : "text-neutral-600"}`;
   const currentTicket = terminalData?.currentTicketId ? items.find(t => t.id === terminalData.currentTicketId) : null;
   const canCallNext = isOpen && terminalData && !terminalData.currentTicketId && terminalData.queueOrder.length > 0;
   const canStartSupport = isOpen && currentTicket && currentTicket.status === 'called';
@@ -132,10 +132,10 @@ function DroppableContainer({ id, title, items, isOpen = true, itemCount, termin
       )}
        {currentTicket && (currentTicket.status === 'called' || currentTicket.status === 'in_progress') && (
          // Styled "Now Serving" block
-         <div className="mb-3 p-2.5 rounded-lg bg-green-100 dark:bg-green-900/40 border border-green-300 dark:border-green-700 text-center">
-           <p className="text-xs uppercase tracking-wider font-medium text-green-800 dark:text-green-200">Now Serving</p>
-           <p className="text-sm font-semibold text-green-900 dark:text-green-100 mt-0.5">{currentTicket.teamName}</p>
-           <p className="text-xs text-green-700 dark:text-green-300">{currentTicket.status === 'in_progress' ? '(In Progress)' : '(Called)'}</p>
+         <div className="mb-3 p-2.5 rounded-lg bg-green-100 border border-green-300 text-center">
+           <p className="text-xs uppercase tracking-wider font-medium text-green-800">Now Serving</p>
+           <p className="text-sm font-semibold text-green-900 mt-0.5">{currentTicket.teamName}</p>
+           <p className="text-xs text-green-700">{currentTicket.status === 'in_progress' ? '(In Progress)' : '(Called)'}</p>
          </div>
        )}
       <SortableContext items={sortableItemIds} strategy={verticalListSortingStrategy}>
@@ -148,9 +148,9 @@ function DroppableContainer({ id, title, items, isOpen = true, itemCount, termin
                 onDelete={onDelete} // Pass down the handler
             />
           ))}
-          {items.filter(ticket => ticket.id !== terminalData?.currentTicketId).length === 0 && isOpen && !currentTicket && (<p className="text-neutral-500 dark:text-neutral-400 text-center pt-6 text-sm">Drop tickets here or queue is empty.</p>)}
-          {items.filter(ticket => ticket.id !== terminalData?.currentTicketId).length === 0 && isOpen && currentTicket && (<p className="text-neutral-500 dark:text-neutral-400 text-center pt-6 text-sm">Queue is empty.</p>)}
-          {!isOpen && (<p className="text-neutral-600 dark:text-neutral-400 text-center pt-6 font-medium">Terminal Closed</p>)}
+          {items.filter(ticket => ticket.id !== terminalData?.currentTicketId).length === 0 && isOpen && !currentTicket && (<p className="text-neutral-500 text-center pt-6 text-sm">Drop tickets here or queue is empty.</p>)}
+          {items.filter(ticket => ticket.id !== terminalData?.currentTicketId).length === 0 && isOpen && currentTicket && (<p className="text-neutral-500 text-center pt-6 text-sm">Queue is empty.</p>)}
+          {!isOpen && (<p className="text-neutral-600 text-center pt-6 font-medium">Terminal Closed</p>)}
         </div>
       </SortableContext>
     </div>
@@ -177,31 +177,31 @@ function TerminalManager({ terminals, onAdd, onUpdate, onDelete }: TerminalManag
     function handleEditCancel() { setEditingTerminalId(null); setEditingTerminalName(""); }
 
     return (
-        <div className="mb-8 p-6 bg-white/70 dark:bg-neutral-800/70 backdrop-blur-md rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 w-full max-w-4xl">
+        <div className="mb-8 p-6 bg-white/70 backdrop-blur-md rounded-xl shadow-sm border border-neutral-200 w-full max-w-4xl">
             {/* Apply Apple-like styling: semi-transparent background, blur, rounded corners, subtle border */}
             <h2 className="text-xl font-medium mb-5 text-center">Manage Terminals</h2> {/* Increased margin */}
             <form onSubmit={handleAddSubmit} className="flex gap-3 mb-5 items-end"> {/* Increased gap and margin */}
                 <div className="flex-grow">
-                    <label htmlFor="terminalName" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">New Terminal Name</label> {/* Adjusted label color */}
-                    <input type="text" id="terminalName" value={newTerminalName} onChange={(e) => setNewTerminalName(e.target.value)} required className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500" /> {/* Adjusted text color */}
+                    <label htmlFor="terminalName" className="block text-sm font-medium text-neutral-700 mb-1">New Terminal Name</label> {/* Adjusted label color */}
+                    <input type="text" id="terminalName" value={newTerminalName} onChange={(e) => setNewTerminalName(e.target.value)} required className="w-full px-3 py-2 border border-neutral-300 bg-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400" /> {/* Adjusted text color */}
                 </div>
                 {/* Apple-style button */}
                 <button type="submit" disabled={isAdding} className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60 disabled:cursor-not-allowed h-[42px]">{isAdding ? "Adding..." : "Add"}</button>
             </form>
             <div className="space-y-3"> {/* Increased spacing */}
-                {terminals.length === 0 && <p className="text-neutral-500 dark:text-neutral-400 text-center py-4">No terminals created yet.</p>}
+                {terminals.length === 0 && <p className="text-neutral-500 text-center py-4">No terminals created yet.</p>}
                 {terminals.map((terminal) => (
-                    <div key={terminal.id} className="flex items-center justify-between p-3 border border-neutral-200 dark:border-neutral-700 rounded-lg bg-neutral-50 dark:bg-neutral-750"> {/* Adjusted padding, border, bg */}
+                    <div key={terminal.id} className="flex items-center justify-between p-3 border border-neutral-200 rounded-lg bg-neutral-50"> {/* Adjusted padding, border, bg */}
                         {editingTerminalId === terminal.id ? (
                             <>
-                                <input type="text" value={editingTerminalName} onChange={(e) => setEditingTerminalName(e.target.value)} className="px-3 py-1.5 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent flex-grow mr-2 text-neutral-900 dark:text-neutral-100" autoFocus /> {/* Adjusted text color */}
+                                <input type="text" value={editingTerminalName} onChange={(e) => setEditingTerminalName(e.target.value)} className="px-3 py-1.5 border border-neutral-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent flex-grow mr-2 text-neutral-900" autoFocus /> {/* Adjusted text color */}
                                 {/* Apple-style buttons */}
                                 <button onClick={() => handleEditSave(terminal.id)} className="text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-md mr-1">Save</button>
                                 <button onClick={handleEditCancel} className="text-sm bg-neutral-500 hover:bg-neutral-600 text-white font-medium py-1.5 px-3 rounded-md">Cancel</button>
                             </>
                         ) : (
                             <>
-                                <span className="font-medium text-neutral-900 dark:text-neutral-100">{terminal.name}</span> {/* Adjusted text color */}
+                                <span className="font-medium text-neutral-900">{terminal.name}</span> {/* Adjusted text color */}
                                 <div className="flex items-center gap-2">
                                      {/* Subtle text button */}
                                      <button onClick={() => handleEditClick(terminal)} className="text-sm text-blue-600 hover:text-blue-700 font-medium">Edit</button>
@@ -391,7 +391,7 @@ export default function AdminDashboard() {
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <main className="flex min-h-screen flex-col items-center p-8 bg-[var(--background)] text-[var(--foreground)]">
+      <main className="flex min-h-screen flex-col items-center p-8 bg-white text-neutral-900">
         <h1 className="text-3xl font-semibold mb-4">Admin Dashboard</h1>
         <div className="mb-4">
             <Link href="/manage/teams" className="text-blue-500 hover:text-blue-600 underline">Manage Teams & Participants</Link>
@@ -399,16 +399,16 @@ export default function AdminDashboard() {
 
         {/* Add New Ticket Form */}
         {/* Apply Apple-like styling: semi-transparent background, blur, rounded corners, subtle border */}
-        <form onSubmit={handleAddTicket} className="mb-8 p-6 bg-white/70 dark:bg-neutral-800/70 backdrop-blur-md rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 w-full max-w-md">
+        <form onSubmit={handleAddTicket} className="mb-8 p-6 bg-white/70 backdrop-blur-md rounded-xl shadow-sm border border-neutral-200 w-full max-w-md">
             <h2 className="text-lg font-medium mb-4 text-center">Add New Ticket</h2>
              <div className="mb-3"> {/* Increased margin */}
-                <label htmlFor="teamId" className="block text-sm font-medium text-[var(--foreground)] mb-1">Team *</label>
+                <label htmlFor="teamId" className="block text-sm font-medium text-neutral-700 mb-1">Team *</label>
                 <select
                     id="teamId"
                     value={newTicketTeamId}
                     onChange={(e) => { setNewTicketTeamId(e.target.value); setNewTicketParticipantId(""); /* Reset participant on team change */ }}
                     required
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[var(--foreground)] placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+                    className="w-full px-3 py-2 border border-neutral-300 bg-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400"
                 >
                     <option value="" disabled>Select Team</option>
                     {teams.map(team => (
@@ -417,13 +417,13 @@ export default function AdminDashboard() {
                 </select>
              </div>
              <div className="mb-3"> {/* Increased margin */}
-                <label htmlFor="participantId" className="block text-sm font-medium text-[var(--foreground)] mb-1">Participant (Optional)</label>
+                <label htmlFor="participantId" className="block text-sm font-medium text-neutral-700 mb-1">Participant (Optional)</label>
                 <select
                     id="participantId"
                     value={newTicketParticipantId}
                     onChange={(e) => setNewTicketParticipantId(e.target.value)}
                     disabled={!newTicketTeamId} // Disable if no team is selected
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[var(--foreground)] placeholder:text-neutral-400 dark:placeholder:text-neutral-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 border border-neutral-300 bg-neutral rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <option value="" disabled={!newTicketTeamId}>Select Participant</option>
                     {participants
@@ -435,8 +435,8 @@ export default function AdminDashboard() {
                 </select>
              </div>
             <div className="mb-5"> {/* Increased margin */}
-                <label htmlFor="topic" className="block text-sm font-medium text-[var(--foreground)] mb-1">Topic *</label>
-                <input type="text" id="topic" value={newTicketTopic} onChange={(e) => setNewTicketTopic(e.target.value)} required className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-[var(--foreground)] placeholder:text-neutral-400 dark:placeholder:text-neutral-500" />
+                <label htmlFor="topic" className="block text-sm font-medium text-neutral-700 mb-1">Topic *</label>
+                <input type="text" id="topic" value={newTicketTopic} onChange={(e) => setNewTicketTopic(e.target.value)} required className="w-full px-3 py-2 border border-neutral-300 bg-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400" />
             </div>
             {/* Apple-style primary button */}
             <button type="submit" disabled={isAddingTicket || !newTicketTeamId} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed">{isAddingTicket ? "Adding..." : "Add Ticket"}</button>
