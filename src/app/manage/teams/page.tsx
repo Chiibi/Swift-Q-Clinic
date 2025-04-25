@@ -11,7 +11,8 @@ import {
   addDoc,
   deleteDoc,
   updateDoc,
-  setDoc, // Use setDoc for adding participant with specific UUID
+  setDoc,
+  arrayUnion, // Use setDoc for adding participant with specific UUID
 } from "firebase/firestore";
 import { Team, Participant } from "@/lib/firebase/types";
 import Link from 'next/link'; // For navigation back
@@ -198,8 +199,8 @@ export default function ManageTeamsPage() {
     await setDoc(participantRef, { name: name, teamId: teamId }); // Use setDoc to ensure the specific ID is used
     console.log(`Added participant ${name} (${uuid}) to team ${teamId}`);
     // Optionally add participant ref/name to team members array?
-    // const teamRef = doc(db, "teams", teamId);
-    // await updateDoc(teamRef, { members: arrayUnion(uuid) });
+    const teamRef = doc(db, "teams", teamId);
+    await updateDoc(teamRef, { members: arrayUnion(uuid) });
   }
   async function updateParticipant(id: string, updates: Partial<Participant>) {
     const participantRef = doc(db, "participants", id);
