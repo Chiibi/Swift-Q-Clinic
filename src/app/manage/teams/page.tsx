@@ -12,7 +12,8 @@ import {
   deleteDoc,
   updateDoc,
   setDoc,
-  arrayUnion, // Use setDoc for adding participant with specific UUID
+  arrayUnion,
+	serverTimestamp, // Use setDoc for adding participant with specific UUID
 } from "firebase/firestore";
 import { Team, Participant } from "@/lib/firebase/types";
 import Link from 'next/link'; // For navigation back
@@ -211,13 +212,22 @@ export default function ManageTeamsPage() {
     // Potential enhancement: Query and delete associated participants, or reassign them.
   }
 
-  async function addParticipant(name: string, uuid: string, teamId: string) {
-    const participantRef = doc(db, "participants", uuid); // Use UUID as document ID
-    await setDoc(participantRef, { name: name, teamID: teamId }); // Use setDoc to ensure the specific ID is used
-    console.log(`Added participant ${name} (${uuid}) to team ${teamId}`);
+  async function addParticipant(name: string, content: string, teamId: string) {
+		const tagID = content.split('=')[1]
+    const participantRef = doc(db, "participants", tagID); // Use UUID as document ID
+    await setDoc(
+			participantRef, 
+			{ 
+				isCheckedIn: false,
+				name: name, 
+				teamID: teamId,
+				nfcTagID: tagID,
+				registrationTimestamp: serverTimestamp()
+			}); // Use setDoc to ensure the specific ID is used
+    console.log(`Added participant ${name} (${tagID}) to team ${teamId}`);
     // Optionally add participant ref/name to team members array?
     const teamRef = doc(db, "teams", teamId);
-    await updateDoc(teamRef, { members: arrayUnion(uuid) });
+    await updateDoc(teamRef, { members: arrayUnion(tagID) });
   }
   async function updateParticipant(id: string, updates: Partial<Participant>) {
     const participantRef = doc(db, "participants", id);
