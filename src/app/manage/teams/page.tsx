@@ -13,7 +13,9 @@ import {
   updateDoc,
   setDoc,
   arrayUnion,
-	serverTimestamp, // Use setDoc for adding participant with specific UUID
+	serverTimestamp,
+	getDoc,
+	arrayRemove, // Use setDoc for adding participant with specific UUID
 } from "firebase/firestore";
 import { Team, Participant } from "@/lib/firebase/types";
 import Link from 'next/link'; // For navigation back
@@ -236,9 +238,32 @@ export default function ManageTeamsPage() {
   }
   async function deleteParticipant(id: string) {
     const participantRef = doc(db, "participants", id);
-    await deleteDoc(participantRef);
-    console.log(`Deleted participant ${id}`);
-    // TODO: Update team members array if needed
+    // Update team members array
+		// Get the participant document first to find the teamID
+		const participantSnap = await getDoc(participantRef);
+
+		if (!participantSnap.exists()) {
+			console.error(`Participant ${id} does not exist.`);
+			return;
+		}
+	
+		const participantData = participantSnap.data();
+		const teamID = participantData.teamID;
+
+		// Delete the participant document
+		await deleteDoc(participantRef);
+		console.log(`Deleted participant ${id}`);
+	
+		// Remove the participant ID from the team's members array
+		if (teamID) {
+			const teamRef = doc(db, "teams", teamID);
+			await updateDoc(teamRef, {
+				members: arrayRemove(id),
+			});
+			console.log(`Removed participant ${id} from team ${teamID}`);
+		} else {
+			console.warn(`Participant ${id} had no teamID`);
+		}
   }
 
   return (
