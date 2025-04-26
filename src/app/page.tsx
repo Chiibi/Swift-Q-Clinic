@@ -16,6 +16,8 @@ import {
   serverTimestamp,
   arrayUnion,
   arrayRemove,
+  getDoc,
+  increment,
 } from "firebase/firestore";
 import { Terminal, SupportTicket, SupportTicketStatus, Team, Participant } from "@/lib/firebase/types"; // Re-added Team, Participant
 import {
@@ -315,7 +317,7 @@ export default function AdminDashboard() {
         completedTimestamp: null,
         supportTimeLimit: null,
       });
-      await updateDoc(doc(db, "teams", selectedTeam.id), { ticketCount: selectedTeam.ticketCount - 1 })
+      await updateDoc(doc(db, "teams", selectedTeam.id), { ticketCount: increment(-1) })
       setNewTicketTeamId(""); // Reset selection
       setNewTicketParticipantId(""); // Reset selection
       setNewTicketTopic("");
@@ -351,6 +353,7 @@ export default function AdminDashboard() {
     if (window.confirm(`Are you sure you want to delete ticket for "${teamName}" about "${topic}"?`)) {
       console.log("Deleting ticket:", ticketId);
       const ticketRef = doc(db, "supportTickets", ticketId);
+      const supportTicketSnap = await getDoc(ticketRef);
       try {
         // Before deleting, check if it's the current ticket in any terminal
         const terminalsUsingTicket = terminals.filter(t => t.currentTicketId === ticketId);
@@ -368,9 +371,20 @@ export default function AdminDashboard() {
             }
         });
 
+        // refund Teams ticketCount
+        if (supportTicketSnap.exists()) {
+          const supportTicketData = supportTicketSnap.data();
+
+          await updateDoc(doc(db, "teams", supportTicketData.teamId), { ticketCount: increment(1) })
+          console.log(`Refund ticket to team ${supportTicketData.teamId}.`);
+        } else {
+          alert("Failed to refund ticket, Please update manually.")
+        }
+
         batch.delete(ticketRef); // Delete the ticket itself
         await batch.commit();
         console.log(`Deleted ticket ${ticketId} and removed from queues.`);
+
       } catch (error) {
         console.error("Error deleting ticket:", error);
         alert("Failed to delete ticket.");
