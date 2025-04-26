@@ -2,8 +2,11 @@ import { Timestamp } from "firebase/firestore";
 
 export interface Participant {
   id: string; // Document ID (UUID)
+  isCheckedIn: boolean;
   name: string;
-  teamId: string; // Reference to Team document ID
+  teamID: string; // Reference to Team document ID
+  nfcTagID: string;
+  registrationTimestamp: Timestamp;
 }
 
 export interface Team {

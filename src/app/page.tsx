@@ -284,7 +284,7 @@ export default function AdminDashboard() {
     // Participant is optional, but if selected, find it
     let selectedParticipant: Participant | undefined = undefined;
     if (newTicketParticipantId) {
-        selectedParticipant = participants.find(p => p.id === newTicketParticipantId && p.teamId === newTicketTeamId);
+        selectedParticipant = participants.find(p => p.id === newTicketParticipantId && p.teamID === newTicketTeamId);
         if (!selectedParticipant) {
             alert("Selected participant not found or does not belong to the selected team.");
             // Optionally reset participant selection or handle differently
@@ -410,7 +410,7 @@ export default function AdminDashboard() {
                         <option key={team.id} value={team.id}>{team.name}</option>
                     ))}
                 </select>
-             </div>
+            </div>
              <div className="mb-3"> {/* Increased margin */}
                 <label htmlFor="participantId" className="block text-sm font-medium text-neutral-700 mb-1">Participant (Optional)</label>
                 <select
@@ -422,13 +422,13 @@ export default function AdminDashboard() {
                 >
                     <option value="" disabled={!newTicketTeamId}>Select Participant</option>
                     {participants
-                        .filter(p => p.teamId === newTicketTeamId) // Filter participants by selected team
+                        .filter(p => p.teamID === newTicketTeamId) // Filter participants by selected team
                         .map(participant => (
                             <option key={participant.id} value={participant.id}>{participant.name}</option>
                         ))
                     }
                 </select>
-             </div>
+            </div>
             <div className="mb-5"> {/* Increased margin */}
                 <label htmlFor="topic" className="block text-sm font-medium text-neutral-700 mb-1">Topic *</label>
                 <input type="text" id="topic" value={newTicketTopic} onChange={(e) => setNewTicketTopic(e.target.value)} required className="w-full px-3 py-2 border border-neutral-300 bg-neutral rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-neutral-900 placeholder:text-neutral-400" />
