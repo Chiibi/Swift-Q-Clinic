@@ -280,6 +280,10 @@ export default function AdminDashboard() {
         alert("Selected team not found.");
         return;
     }
+    if(selectedTeam.ticketCount <= 0) {
+      alert("Ticket หมดแล้วจ้า")
+      return;
+    }
 
     // Participant is optional, but if selected, find it
     let selectedParticipant: Participant | undefined = undefined;
@@ -311,6 +315,7 @@ export default function AdminDashboard() {
         completedTimestamp: null,
         supportTimeLimit: null,
       });
+      await updateDoc(doc(db, "teams", selectedTeam.id), { ticketCount: selectedTeam.ticketCount - 1 })
       setNewTicketTeamId(""); // Reset selection
       setNewTicketParticipantId(""); // Reset selection
       setNewTicketTopic("");
